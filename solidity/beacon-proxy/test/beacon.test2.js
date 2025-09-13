@@ -46,5 +46,23 @@ describe("Beacon Test", function () {
     const num = await beaconProxy.getNum();
     console.log("设置后的数字:", num);
 
+    // 合约升级
+    const HImplemention2 = await ethers.getContractFactory("HImplementionV2");
+    const HImplemention2Contract = await HImplemention2.deploy();
+    await HImplemention2Contract.waitForDeployment();
+    const HImplemention2Address = await HImplemention2Contract.getAddress();
+    console.log("升级后的实现合约地址:", HImplemention2Address)
+
+    // 通过信标合约升级
+    HBeaconContract.upgradeTo(HImplemention2Address);
+
+    const numed = await beaconProxy.getNum();
+    console.log("升级后的数字:", numed);
+
+    // 使用升级后的实现合约的ABI连接到代理合约
+    const beaconProxy2 = await ethers.getContractAt("HImplementionV2", beaconProxyAddress[0]);
+    const version = await beaconProxy2.getVersion();
+    console.log("升级后的版本:", version);
+
   })
 })
