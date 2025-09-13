@@ -5,14 +5,14 @@ import '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 
 // 实现合约
-contract HImplementionV2 is UUPSUpgradeable, OwnableUpgradeable {
+contract HImplementionV2 is OwnableUpgradeable, UUPSUpgradeable {
     uint256 public num;
 
     function _authorizeUpgrade(address) internal view override onlyOwner {}
 
     // 初始化
     function initialize() public initializer {
-        __Ownable_init();
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
     }
 

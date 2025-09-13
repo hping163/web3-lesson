@@ -14,7 +14,7 @@ contract HBeaconFactory is OwnableUpgradeable, UUPSUpgradeable {
 
     // 初始化
     function initialize(address _beacon) public initializer {
-        __Ownable_init();
+        __Ownable_init(msg.sender);
         __UUPSUpgradeable_init();
 
         beacon = _beacon;
@@ -24,11 +24,12 @@ contract HBeaconFactory is OwnableUpgradeable, UUPSUpgradeable {
     function _authorizeUpgrade(address) internal view override onlyOwner {}
 
     // 创建代理合约
-    function createBeaconProxy() external returns (address) {
+    function createBeaconProxy() external returns (bool) {
         bytes memory data = abi.encodeWithSelector(HImplemention.initialize.selector);
         BeaconProxy _beaconProxy = new BeaconProxy(beacon, data);
         address _beaconProxyAddress = address(_beaconProxy);
-        return _beaconProxyAddress;
+        beaconProxys.push(_beaconProxyAddress);
+        return true;
     }
 
     function getBeaconProxys() external view returns (address[] memory) {
