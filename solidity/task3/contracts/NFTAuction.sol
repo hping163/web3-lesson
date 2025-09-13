@@ -4,12 +4,12 @@ pragma solidity ^0.8.28;
 import '@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol';
-import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { AggregatorV3Interface } from '@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol';
 import 'hardhat/console.sol';
 
 // 拍卖合约
-contract NFTAuction is Initializable, UUPSUpgradeable {
+contract NFTAuction is OwnableUpgradeable, UUPSUpgradeable {
     error AddressInvalid(address nftAddress, uint256 tokenId);
     // 拍卖结束事件
     event AuctionEnded(uint256 tokenId, address winner, uint256 amount);
@@ -37,7 +37,8 @@ contract NFTAuction is Initializable, UUPSUpgradeable {
 
     // 初始化
     function initialize() public initializer {
-        admin = msg.sender;
+        __Ownable_init();
+        __UUPSUpgradeable_init();
     }
 
     // 创建拍卖
@@ -48,12 +49,11 @@ contract NFTAuction is Initializable, UUPSUpgradeable {
 
         console.log('nftAddress::', nftAddress, '\ntokenId::', tokenId);
 
-       // 授权 (这里授权为什么会无效，而在测试用例中写就可以呢？？？)
-       // IERC721Upgradeable(nftAddress).approve(address(this), tokenId);
+        // 授权 (这里授权为什么会无效，而在测试用例中写就可以呢？？？)
+        // IERC721Upgradeable(nftAddress).approve(address(this), tokenId);
 
         // 转移NFT到合约
         IERC721Upgradeable(nftAddress).transferFrom(msg.sender, address(this), tokenId);
-        
 
         AuctionItem memory auctionItem = AuctionItem({ tokenId: tokenId, nftAddress: nftAddress, seller: msg.sender, startTime: startTime, duration: duration, highestBidder: address(0), highestBid: 0, tokenAddress: tokenAddess, ended: false, endTime: 0 });
         auctions[tokenId] = auctionItem;
@@ -176,9 +176,7 @@ contract NFTAuction is Initializable, UUPSUpgradeable {
     }
 
     // 授权升级
-    function _authorizeUpgrade(address) internal view override {
-        require(msg.sender == admin, 'Not admin');
-    }
+    function _authorizeUpgrade(address) internal view override onlyProxy {}
 
     receive() external payable {}
 
