@@ -47,7 +47,7 @@ func receiveChannelBuffer(wg *sync.WaitGroup, _chan chan int) {
 	}
 }
 
-func main() {
+/*func main() {
 	// 题目1
 	_chan := make(chan int)
 	var sw sync.WaitGroup
@@ -72,4 +72,4 @@ func main() {
 	go receiveChannelBuffer(&sw2, _chanBuffer)
 	// 等待协程执行完成
 	sw2.Wait()
-}
+}*/

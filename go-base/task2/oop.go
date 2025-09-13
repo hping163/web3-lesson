@@ -68,7 +68,7 @@ func (e *Employee) PrintInfo() {
 	fmt.Println("员工ID：", e.EmployeeID)
 }
 
-func main() {
+/*func main() {
 	// 创建Rectangle实例
 	rect := &Rectangle{
 		Width:  5,
@@ -99,4 +99,4 @@ func main() {
 	}
 	// 调用Employee的PrintInfo()方法
 	emp.PrintInfo()
-}
+}*/

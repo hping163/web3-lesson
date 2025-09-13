@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 /*
@@ -31,7 +30,7 @@ func taskSchudle(tasks []func()) {
 	}
 }
 
-func main() {
+/*func main() {
 
 	// 打印1-10的奇数
 	// go printOdd()
@@ -48,4 +47,4 @@ func main() {
 	// 等待协程执行完成
 	time.Sleep(time.Second * 1)
 
-}
+}*/

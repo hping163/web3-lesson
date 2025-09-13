@@ -43,7 +43,7 @@ func countAtomic() {
 	wg.Done()
 }
 
-func main() {
+/*func main() {
 	wg.Add(10)
 	for i := 0; i < 10; i++ {
 		go count(&mu)
@@ -60,4 +60,4 @@ func main() {
 	}
 	wg.Wait()
 	fmt.Println("counter最终值为：", counter)
-}
+}*/
